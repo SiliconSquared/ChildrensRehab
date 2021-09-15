@@ -1,0 +1,28 @@
+﻿<Application x:Class="RehabKiosk.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:RehabKiosk"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             >
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:SharedResourceDictionary Source="pack://application:,,,/RehabKiosk;component/Styles/RehabThemes.xaml"/>
+                <local:SharedResourceDictionary Source="pack://application:,,,/RehabKiosk;component/Resources/VectorImages.xaml"/>
+                <local:SharedResourceDictionary Source="pack://application:,,,/RehabKiosk;component/Styles/RehabAppStyles.xaml"/>
+                <local:SharedResourceDictionary Source="pack://application:,,,/RehabKiosk;component/Styles/RehabComboBoxStyle.xaml"/>
+                <local:SharedResourceDictionary Source="pack://application:,,,/RehabKiosk;component/Styles/RehabScrollbarStyles.xaml"/>
+                <local:SharedResourceDictionary Source="pack://application:,,,/RehabKiosk;component/Styles/RehabSliderStyle.xaml"/>
+                <local:SharedResourceDictionary Source="pack://application:,,,/RehabKiosk;component/Styles/RehabColorSliderStyle.xaml"/>
+                <local:SharedResourceDictionary Source="pack://application:,,,/RehabKiosk;component/Styles/ToggleSwitchStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <sys:String x:Key="AppTitle">Rehab Kiosk</sys:String>
+            <sys:String x:Key="Untitled">Untitled</sys:String>
+            <sys:String x:Key="NoTagsDefined">No bookmarks defined</sys:String>
+            <sys:String x:Key="NotConnected">(Not Connected)</sys:String>
+            <sys:String x:Key="HelpHomeURL">file:///C:/Src/Gridder2/demo.html</sys:String>
+            
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

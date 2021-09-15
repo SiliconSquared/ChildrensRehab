@@ -1,0 +1,217 @@
+﻿<Window x:Class="RehabKiosk.MainWindow"
+        x:Name="mainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RehabKiosk"
+        xmlns:controls="clr-namespace:RehabKiosk.Controls"
+        xmlns:converters="clr-namespace:RehabKiosk.Converters"
+        WindowStyle="ToolWindow"
+        WindowState="Maximized"
+        MinHeight="800"
+        MinWidth="900"
+        AllowsTransparency="False"
+        ResizeMode="NoResize"
+        Loaded="MainWindow_Loaded"
+        Unloaded="MainWindow_Unloaded"
+        SizeChanged="MainWindow_SizeChanged"
+        Closing="MainWindow_Closing"
+        Closed="MainWindow_Closed"
+        Icon="/Resources/RehabKiosk.ico"
+        WindowStartupLocation="Manual"
+        Activated="AppWindow_Activated"
+        Deactivated="AppWindow_Deactivated"
+        mc:Ignorable="d"        
+        Title="{StaticResource AppTitle}" Height="870" Width="855">
+    
+    <Window.Resources>
+
+        <converters:EnumToColorConverter x:Key="EnumToColorConverter" />
+        <converters:EnumStateToBoolConverter x:Key="EnumStateToBoolConverter" />
+        <converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
+        <converters:EnumStringToTemplateConverter x:Key="EnumStringToTemplateConverter" />
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:BoolInverter x:Key="BoolInverter" />
+        
+        
+
+        <Storyboard x:Key="NewVersionAnimation">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="VersionUpdateVisualTransform"
+                             Storyboard.TargetProperty="X">
+                <LinearDoubleKeyFrame KeyTime="0" Value="200"/>
+                <LinearDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                <LinearDoubleKeyFrame KeyTime="0:0:3" Value="0"/>
+                <LinearDoubleKeyFrame KeyTime="0:0:3.5" Value="200"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="BurgerPanelFlyIn">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="AppContentMask">
+                <DiscreteObjectKeyFrame KeyTime="0">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Visible</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimation Storyboard.TargetName="AppContentMask" Storyboard.TargetProperty="Opacity" To="0.7" Duration="{StaticResource ContentFlyoutDuration}"/>
+
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SettingsCanvas">
+                <DiscreteObjectKeyFrame KeyTime="0">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Visible</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+            <DoubleAnimation Storyboard.TargetName="SettingsCanvas" Storyboard.TargetProperty="Opacity" To="1.0" Duration="{StaticResource ContentFlyoutDuration}"/>
+            <DoubleAnimation Name="BurgerPanelFlyInX" Storyboard.TargetName="SettingsGrid" Storyboard.TargetProperty="(Canvas.Left)" Duration="{StaticResource ContentFlyoutDuration}"/>
+        </Storyboard>
+
+        <Storyboard x:Key="BurgerPanelFlyOut">
+            <DoubleAnimation Storyboard.TargetName="AppContentMask" Storyboard.TargetProperty="Opacity" To="0" Duration="{StaticResource ContentFlyoutDuration}"/>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="AppContentMask">
+                <DiscreteObjectKeyFrame KeyTime="{StaticResource ContentFlyoutEndKeyTime}">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Collapsed</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+
+            <DoubleAnimation Storyboard.TargetName="SettingsCanvas" Storyboard.TargetProperty="Opacity" To="0.5" Duration="{StaticResource ContentFlyoutDuration}"/>
+            <DoubleAnimation Name="BurgerPanelFlyOutX" Storyboard.TargetName="SettingsGrid" Storyboard.TargetProperty="(Canvas.Left)" Duration="{StaticResource ContentFlyoutDuration}"/>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="SettingsCanvas">
+                <DiscreteObjectKeyFrame KeyTime="{StaticResource ContentFlyoutEndKeyTime}">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Collapsed</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="CollapseBurgerBar">
+            <controls:GridLengthAnimation Storyboard.TargetName="BurgerBarWidth" Storyboard.TargetProperty="Width" From="{StaticResource BurgerBarExpandedWidth}" To="{StaticResource BurgerBarCollapsedWidth}" Duration="0:0:0.25"/>
+        </Storyboard>
+        <Storyboard x:Key="ExpandBurgerBar">
+            <controls:GridLengthAnimation Storyboard.TargetName="BurgerBarWidth" Storyboard.TargetProperty="Width" From="{StaticResource BurgerBarCollapsedWidth}" To="{StaticResource BurgerBarExpandedWidth}" Duration="0:0:0.25" />
+        </Storyboard>
+
+
+        <Storyboard x:Key="ShowWelcome">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="WelcomePanel">
+                <DiscreteObjectKeyFrame KeyTime="0">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Visible</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+
+            <DoubleAnimation Storyboard.TargetName="WelcomePanel" Storyboard.TargetProperty="Opacity" To="1.0" Duration="0:0:0.5"/>
+            <DoubleAnimation Storyboard.TargetName="WelcomePanel" Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)" To="1" Duration="0:0:0.5"/>
+            <DoubleAnimation Storyboard.TargetName="WelcomePanel" Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)" To="1" Duration="0:0:0.5"/>
+        </Storyboard>
+
+        <Storyboard x:Key="HideWelcome">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="WelcomePanel">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Collapsed</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+
+            <DoubleAnimation Storyboard.TargetName="WelcomePanel" Storyboard.TargetProperty="Opacity" To="0.1" Duration="0:0:0.5"/>
+            <DoubleAnimation Storyboard.TargetName="WelcomePanel" Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleX)" To="0.1" Duration="0:0:0.5"/>
+            <DoubleAnimation Storyboard.TargetName="WelcomePanel" Storyboard.TargetProperty="RenderTransform.(ScaleTransform.ScaleY)" To="0.1" Duration="0:0:0.5"/>
+        </Storyboard>
+
+
+    </Window.Resources>
+
+    <Window.Style>
+        <Style TargetType="Window">
+             <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome />
+                </Setter.Value>
+            </Setter>
+            
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type local:MainWindow}">
+                        <Grid>
+                            <Border Background="Black" Margin="-1">
+                                <AdornerDecorator>
+                                    <ContentPresenter Content="{TemplateBinding Content}" Margin="0,0,0,0" />
+                                </AdornerDecorator>
+                            </Border>
+
+                            <DockPanel Visibility="Collapsed" Height="30" VerticalAlignment="Top" LastChildFill="False" Margin="{Binding ElementName=mainWindow, Path=FrameThickness}">
+                                <StackPanel Width="{StaticResource BurgerBarCollapsedWidthF}" Orientation="Horizontal">
+                                    <Image Height="26" Source="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Icon}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="{StaticResource BurgerBarCollapsedWidthF}"/>
+                                </StackPanel>
+                                
+                                <TextBlock Margin="5,0,0,0" FontSize="14" VerticalAlignment="Center" DockPanel.Dock="Left" Text="{TemplateBinding Title}" Foreground="{Binding IsApplicationActive, Converter={StaticResource AppObjectForegroundActiveBrushConverter}}" />
+
+                                <Button Name="SysMenuClose" Height="20" Width="20" ClipToBounds="True" Click="SysMenuCloseButton_Click" Margin="-2,1,5,0" Style="{StaticResource SysMenuButtonStyle}" Foreground="White" Background="#e81123" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" Visibility="{Binding Path=ViewModel.IsEditing, Source={x:Static Application.Current}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='True'}" AutomationProperties.Name="Close Application">
+                                    <ContentControl Template="{StaticResource sysMenuClose}" Margin="0,-2,0,0" Foreground="{Binding IsApplicationActive, Converter={StaticResource AppObjectForegroundActiveBrushConverter}}" Focusable="False"/>
+                                </Button>
+
+                                <Button Name="SysMenuRestore" Height="20" Width="20" Click="SysMenuRestoreButton_Click" Style="{StaticResource SysMenuButtonStyle}" Foreground="White" Background="#33FFFFFF" Margin="3,1,5,0" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" AutomationProperties.Name="Restore Application Window">
+                                    <ContentControl Template="{StaticResource sysMenuRestore}" Foreground="{Binding IsApplicationActive, Converter={StaticResource AppObjectForegroundActiveBrushConverter}}" Focusable="False"/>
+                                </Button>
+
+                                <Button Name="SysMenuMinimize" Height="20" Width="20" Click="SysMenuMinimizeButton_Click" Style="{StaticResource SysMenuButtonStyle}" Foreground="White" Background="#33FFFFFF" Margin="0,1,0,0" DockPanel.Dock="Right" WindowChrome.IsHitTestVisibleInChrome="True" AutomationProperties.Name="Minimize Application Window">
+                                    <ContentControl Template="{StaticResource sysMenuMinimize}" Margin="0,-2,0,0" Foreground="{Binding IsApplicationActive, Converter={StaticResource AppObjectForegroundActiveBrushConverter}}" Focusable="False"/>
+                                </Button>
+                            </DockPanel>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Style>
+
+    
+    <Border BorderThickness="{Binding FrameThickness}" Margin="-1">
+        <Grid>
+            <Grid x:Name="AppContentRoot" Background="Black">
+                <Grid Name="AppContentBody" IsHitTestVisible="{Binding Path=ViewModel.CloudGallery.ConnectionActivity, Source={x:Static Application.Current}, Converter={converters:BoolInverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{StaticResource BurgerBarCollapsedWidth}" x:Name="BurgerBarWidth"/>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <controls:HubFrameContainer x:Name="HubFrame" Grid.Column="1" />
+
+                    <Border Width="200" Height="40" CornerRadius="5" Background="{StaticResource CircularButtonBackground}" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <Border.RenderTransform>
+                            <TranslateTransform x:Name="VersionUpdateVisualTransform" X="200"/>
+                        </Border.RenderTransform>
+                        <TextBlock Text="A new version of ExpressivePixels is available" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" TextAlignment="Center"/>
+                    </Border>
+                
+                    <Canvas x:Name="AppContentMask" Grid.Column="1" Background="Black" Opacity="0.3" Visibility="Collapsed" MouseLeftButtonDown="AppContentMask_MouseLeftButtonDown"/>
+
+                    <Canvas x:Name="SettingsCanvas" Grid.Column="1" Width="{Binding CurrentBurgerPanelWidth}" HorizontalAlignment="Left" Visibility="Collapsed" Opacity="0.5">
+                        <Grid x:Name="SettingsGrid" Width="{Binding ElementName=SettingsCanvas, Path=ActualWidth}" Height="{Binding ElementName=SettingsCanvas, Path=ActualHeight}"/>
+                    </Canvas>
+                </Grid>
+            </Grid>
+
+            
+            <Grid x:Name="AppPopupFrame" Visibility="Collapsed">
+                <Grid Background="Black" Opacity="0.4" />
+                <ContentControl x:Name="PopupContentControl" KeyboardNavigation.TabNavigation="Cycle" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Grid>
+
+            <Border x:Name="WelcomePanel" Margin="90" Visibility="Collapsed" BorderBrush="White" BorderThickness="0.5" Opacity="0.1" RenderTransformOrigin="0.5,0.5">
+                <Border.RenderTransform>
+                    <ScaleTransform ScaleX="0.1" ScaleY="0.1"/>
+                </Border.RenderTransform>
+
+                <Grid x:Name="WelcomePanelCore" Background="{StaticResource BurgerBarBackground}"/>
+            </Border>
+            
+        </Grid>
+    </Border>
+</Window>

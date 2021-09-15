@@ -1,0 +1,1193 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    x:Class="RehabKiosk.RehabKioskResourceClass"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:RehabKiosk"
+                    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+                    xmlns:controls="clr-namespace:RehabKiosk.Controls"
+                    xmlns:converters="clr-namespace:RehabKiosk.Converters"
+                    xmlns:ctrls="clr-namespace:RehabKiosk.Controls"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+
+
+    <sys:Double x:Key="LEDPixelDiameter">17</sys:Double>
+    
+    <GridLength x:Key="BurgerBarCollapsedWidth">45</GridLength>
+    <sys:Double x:Key="BurgerBarCollapsedWidthF">45</sys:Double>
+    <GridLength x:Key="BurgerBarExpandedWidth">190</GridLength>
+    <sys:Double x:Key="BurgerBarExpandedWidthF">190</sys:Double>
+
+    <Duration x:Key="ContentFlyoutDuration">0:0:0.5</Duration>
+    <KeyTime x:Key="ContentFlyoutEndKeyTime">0:0:0.5</KeyTime>
+
+    <Duration x:Key="ContentFlyinDuration">0:0:0.75</Duration>
+
+    <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <converters:ModeToVisibilityConverter x:Key="ModeToVisibilityConverter" />
+    <converters:ByteArrayToBitmapImageConverter x:Key="ByteArrayToBitmapImageConverter" />
+    <converters:ListViewIndexConverter x:Key="ListViewIndexConverter" />
+    <converters:DoubleInflatorConverter x:Key="DoubleInflatorConverter" />
+    <converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
+    <converters:TrueFalseBrushConverter x:Key="AppBarActiveBrushConverter" TrueBrush="{StaticResource TitlebarForegroundActive}" FalseBrush="{StaticResource TitlebarForegroundInactive}"/>
+    <converters:TrueFalseBrushConverter x:Key="AppBorderActiveBrushConverter" TrueBrush="{StaticResource ApplicationBorderActive}" FalseBrush="{StaticResource ApplicationBorderInactive}"/>
+    <converters:TrueFalseBrushConverter x:Key="AppObjectForegroundActiveBrushConverter" TrueBrush="{StaticResource AppObjectForegroundActive}" FalseBrush="{StaticResource AppObjectForegroundInactive}"/>
+
+    <SolidColorBrush x:Key="SimpleCircularButtonBackgroundThemeBrush" Color="LightGray" />
+
+    <Style x:Key="BurgerBarButtonStyle" TargetType="Button">
+        <Setter Property="Height" Value="45"/>
+        <Setter Property="Width" Value="{StaticResource BurgerBarExpandedWidthF}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="{StaticResource BurgerBarForeground}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="RootGrid" Background="{StaticResource BurgerBarBackground}">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{StaticResource BurgerBarCollapsedWidth}" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Viewbox Grid.Column="0" Width="24" Height="24" HorizontalAlignment="Center" Margin="0,0,0,0">
+                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="{TemplateBinding ctrls:ButtonAttachedBehavior.Glyph}" Foreground="{TemplateBinding ctrls:ButtonAttachedBehavior.GlyphForeground}"/>
+                                </Viewbox>
+
+                                <Viewbox Grid.Column="0" Width="24" Height="24" HorizontalAlignment="Center" Margin="0,0,0,0">
+                                    <ContentControl Template="{TemplateBinding ctrls:ButtonAttachedBehavior.GlyphContent}"/>
+                                </Viewbox>
+
+                                <TextBlock Grid.Column="1" FontFamily="Segoe UI" Text="{TemplateBinding ctrls:ButtonAttachedBehavior.Label}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+                                <Rectangle x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1" Margin="3"/>
+                                <Rectangle x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1" Width="{Binding ElementName=RootGrid, Path=ActualWidth}" Height="{Binding ElementName=RootGrid, Path=ActualHeight}" Margin="3"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Opacity">
+                                            <DiscreteDoubleKeyFrame KeyTime="0" Value="0.7"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Opacity">
+                                            <DiscreteDoubleKeyFrame KeyTime="0" Value="0.5"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="0.25" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RootGrid" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused" />
+                                <VisualState x:Name="PointerFocused" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="controls:ButtonAttachedBehavior.SelectionToggle" Value="True">
+                            <Setter TargetName="RootGrid" Property="Background" Value="{StaticResource BurgerBarButtonSelectedBackground}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="FilterToggleButtonStyle" TargetType="ToggleButton">
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="controls:CircularButtonFillAttachedProperty.CircularButtonFill" Value="{StaticResource CircularButtonBackground}"/>
+        <Setter Property="controls:ButtonAttachedBehavior.HighlightFillClipRadius" Value="28"/>
+        <Setter Property="controls:ButtonAttachedBehavior.CenterPoint" Value="14,14"/>
+        <Setter Property="controls:ButtonAttachedBehavior.GlyphMargin" Value="0,0,0,0"/>
+        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid x:Name="grid" Background="{TemplateBinding Background}" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{TemplateBinding Width}"/>
+                        </Grid.RowDefinitions>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="0.7" Storyboard.TargetName="ButtonVisualRoot" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard />
+                                </VisualState>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="RectFocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="RectFocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused"/>
+                                <VisualState x:Name="PointerFocused"/>
+                            </VisualStateGroup>
+
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="circButtonHighlight" Storyboard.TargetProperty="Opacity" To="0.75" Duration="0:0:0.5" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="circButtonHighlight" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.5" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid x:Name="ButtonVisualRoot" Grid.Column="0" Grid.Row="0" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="0" HorizontalAlignment="Right">
+                            <Ellipse Stroke="{TemplateBinding Foreground}" StrokeThickness="0" Fill="{TemplateBinding controls:CircularButtonFillAttachedProperty.CircularButtonFill}"/>
+                            <Ellipse x:Name="circButtonHighlight" Stroke="{TemplateBinding Foreground}" StrokeThickness="3" Fill="Aqua" 
+                                     Opacity="0" ClipToBounds="False"
+                                     Margin="{TemplateBinding controls:ButtonAttachedBehavior.HighlightMargin}">
+                                <Ellipse.Effect>
+                                    <BlurEffect Radius="15" />
+                                </Ellipse.Effect>
+                                <Ellipse.Clip>
+                                    <EllipseGeometry Center="{Binding Path=(controls:ButtonAttachedBehavior.CenterPoint), RelativeSource={RelativeSource TemplatedParent}}" RadiusX="{Binding Path=(controls:ButtonAttachedBehavior.HighlightFillClipRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                                                                    RadiusY="{Binding Path=(controls:ButtonAttachedBehavior.HighlightFillClipRadius), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                </Ellipse.Clip>
+                            </Ellipse>
+
+                            <Ellipse x:Name="circButton" Stroke="{TemplateBinding Foreground}" StrokeThickness="0" Fill="Transparent"/>
+                            <ContentPresenter TextBlock.FontSize="{TemplateBinding FontSize}" TextBlock.FontFamily="{TemplateBinding FontFamily}" 
+                                              VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                              TextBlock.Foreground="{TemplateBinding Foreground}"
+                                              Margin="{TemplateBinding controls:ButtonAttachedBehavior.GlyphMargin}"/>
+                            <Ellipse x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1" Visibility="{Binding Path=(controls:ButtonAttachedBehavior.UseSquareFocus), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='True'}"/>
+                            <Ellipse x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1" Visibility="{Binding Path=(controls:ButtonAttachedBehavior.UseSquareFocus), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='True'}"/>
+                            <Rectangle x:Name="RectFocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1" Visibility="{Binding Path=(controls:ButtonAttachedBehavior.UseSquareFocus), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='False'}"/>
+                            <Rectangle x:Name="RectFocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1" Visibility="{Binding Path=(controls:ButtonAttachedBehavior.UseSquareFocus), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='False'}"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="IconAndTextButtonStyle" TargetType="Button">
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Foreground" Value="{StaticResource HubPageButtonForeground}"/>
+        <Setter Property="ctrls:ButtonAttachedBehavior.GlyphForeground" Value="{StaticResource HubPageButtonForeground}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="RootGrid" Background="Transparent">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="26" />
+                                    <ColumnDefinition Width="5" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Viewbox Grid.Column="0" Width="18" Height="18" HorizontalAlignment="Center">
+                                    <TextBlock x:Name="PART_ButtonTextGlyph" FontFamily="Segoe MDL2 Assets" Text="{TemplateBinding ctrls:ButtonAttachedBehavior.Glyph}" Foreground="{TemplateBinding ctrls:ButtonAttachedBehavior.GlyphForeground}"/>
+                                </Viewbox>
+
+                                <Viewbox Grid.Column="0" Width="24" Height="24" HorizontalAlignment="Center">
+                                    <ContentControl Template="{TemplateBinding ctrls:ButtonAttachedBehavior.GlyphContent}"/>
+                                </Viewbox>
+
+                                <TextBlock x:Name="PART_ButtonLabel" Grid.Column="2" FontFamily="Segoe UI" FontSize="{TemplateBinding FontSize}" Text="{TemplateBinding ctrls:ButtonAttachedBehavior.Label}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+                                <Rectangle x:Name="FocusVisualWhite" Grid.ColumnSpan="3" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1" Width="{Binding ElementName=RootGrid, Path=ActualWidth}" Height="{Binding ElementName=RootGrid, Path=ActualHeight}"/>
+                                <Rectangle x:Name="FocusVisualBlack" Grid.ColumnSpan="3" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1" Width="{Binding ElementName=RootGrid, Path=ActualWidth}" Height="{Binding ElementName=RootGrid, Path=ActualHeight}"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.1" To="0.7" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PART_ButtonTextGlyph" />
+                                        <DoubleAnimation Duration="0:0:0.1" To="0.7" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PART_ButtonLabel" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.1" To="0.4" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PART_ButtonTextGlyph" />
+                                        <DoubleAnimation Duration="0:0:0.1" To="0.4" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PART_ButtonLabel" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="0.25" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RootGrid" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused" />
+                                <VisualState x:Name="PointerFocused" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+    <Style x:Key="OvalIconAndTextButtonStyle" TargetType="Button">
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Background" Value="#4C4C4C"/>
+        <Setter Property="Foreground" Value="{StaticResource HubPageButtonForeground}"/>
+        <Setter Property="controls:ButtonAttachedBehavior.GlyphForeground" Value="White"/>
+        <Setter Property="controls:ButtonAttachedBehavior.LabelMargin" Value="0,0,0,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="RootGrid" >
+                        <Rectangle Fill="{TemplateBinding Background}" StrokeThickness="0" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" RadiusX="{TemplateBinding controls:ButtonAttachedBehavior.RoundedRadius}" RadiusY="{TemplateBinding controls:ButtonAttachedBehavior.RoundedRadius}"/>
+
+                        <Grid>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Grid>
+                                    <TextBlock x:Name="PART_ButtonTextGlyph" FontFamily="Segoe MDL2 Assets" FontSize="{TemplateBinding FontSize}" Text="{TemplateBinding controls:ButtonAttachedBehavior.Glyph}" Foreground="{TemplateBinding controls:ButtonAttachedBehavior.GlyphForeground}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                    <Viewbox Height="{TemplateBinding controls:ButtonAttachedBehavior.GlyphContentHeight}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <ContentControl Template="{TemplateBinding controls:ButtonAttachedBehavior.GlyphContent}"/>
+                                    </Viewbox>
+                                </Grid>
+
+                                <TextBlock x:Name="PART_ButtonLabel" FontFamily="Segoe UI" FontSize="{TemplateBinding FontSize}" Text="{TemplateBinding controls:ButtonAttachedBehavior.Label}" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{TemplateBinding Foreground}" Margin="{TemplateBinding controls:ButtonAttachedBehavior.LabelMargin}"/>
+                            </StackPanel>
+
+                            <Rectangle x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1" Width="{Binding ElementName=RootGrid, Path=ActualWidth}" Height="{Binding ElementName=RootGrid, Path=ActualHeight}" RadiusX="{TemplateBinding controls:ButtonAttachedBehavior.RoundedRadius}" RadiusY="{TemplateBinding controls:ButtonAttachedBehavior.RoundedRadius}"/>
+                            <Rectangle x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1" Width="{Binding ElementName=RootGrid, Path=ActualWidth}" Height="{Binding ElementName=RootGrid, Path=ActualHeight}" RadiusX="{TemplateBinding controls:ButtonAttachedBehavior.RoundedRadius}" RadiusY="{TemplateBinding controls:ButtonAttachedBehavior.RoundedRadius}"/>
+                        </Grid>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.1" To="0.7" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RootGrid" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.1" To="0.4" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RootGrid" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="0.25" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RootGrid" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused" />
+                                <VisualState x:Name="PointerFocused" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="TextButtonStyle" TargetType="Button">
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Foreground" Value="{StaticResource HubPageButtonForeground}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="RootGrid" Background="Transparent">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock x:Name="PART_ButtonLabel" Grid.Column="0" FontFamily="Segoe UI" FontSize="14" Text="{TemplateBinding ctrls:ButtonAttachedBehavior.Label}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+                                <Rectangle x:Name="FocusVisualWhite" Grid.ColumnSpan="1" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1" Width="{Binding ElementName=RootGrid, Path=ActualWidth}" Height="{Binding ElementName=RootGrid, Path=ActualHeight}"/>
+                                <Rectangle x:Name="FocusVisualBlack" Grid.ColumnSpan="1" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1" Width="{Binding ElementName=RootGrid, Path=ActualWidth}" Height="{Binding ElementName=RootGrid, Path=ActualHeight}"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.1" To="0.7" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PART_ButtonLabel" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.1" To="0.4" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PART_ButtonLabel" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="0.25" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RootGrid" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused" />
+                                <VisualState x:Name="PointerFocused" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+    <Style x:Key="EditSelectableArcButtonStyle" TargetType="Button">
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="Margin" Value="0,0,0,0"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="ctrls:CircularButtonFillAttachedProperty.CircularButtonFill" Value="{StaticResource CircularButtonBackground}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="grid" Background="{TemplateBinding Background}" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{TemplateBinding Width}"/>
+                        </Grid.RowDefinitions>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="circButton" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ResourceKey=SimpleCircularButtonBackgroundThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard />
+                                </VisualState>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused"/>
+                                <VisualState x:Name="PointerFocused"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid Grid.Column="0" Grid.Row="0" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="0" HorizontalAlignment="Right">
+                            <Ellipse x:Name="circButton" Stroke="{TemplateBinding Foreground}" StrokeThickness="0" Fill="{TemplateBinding ctrls:CircularButtonFillAttachedProperty.CircularButtonFill}" />
+                            <ContentPresenter TextBlock.FontSize="{TemplateBinding FontSize}" TextBlock.FontFamily="Segoe UI Symbol" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                            <Ellipse x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1"/>
+                            <Ellipse x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SmallGlyphButtonStyle" TargetType="Button">
+        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="Margin" Value="0,0,0,0"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="ctrls:CircularButtonFillAttachedProperty.CircularButtonFill" Value="#33FFFFFF"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="grid" Background="{TemplateBinding Background}" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{TemplateBinding Width}"/>
+                        </Grid.RowDefinitions>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="circButton" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ResourceKey=SimpleCircularButtonBackgroundThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard />
+                                </VisualState>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused"/>
+                                <VisualState x:Name="PointerFocused"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid Grid.Column="0" Grid.Row="0" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="0" HorizontalAlignment="Right">
+                            <Ellipse x:Name="circButton" Stroke="{TemplateBinding Foreground}" StrokeThickness="0" Fill="{TemplateBinding ctrls:CircularButtonFillAttachedProperty.CircularButtonFill}" />
+                            <ContentPresenter TextBlock.FontSize="{TemplateBinding FontSize}" 
+                                              TextBlock.FontFamily="{TemplateBinding FontFamily}" 
+                                              TextBlock.FontWeight="{TemplateBinding FontWeight}" 
+                                              VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                              TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                            <Ellipse x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1"/>
+                            <Ellipse x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SysMenuButtonStyle" TargetType="Button">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver"/>
+                                <VisualState x:Name="Pressed"/>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused" />
+                                <VisualState x:Name="PointerFocused" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Rectangle x:Name="backgroundRectangle" Fill="Transparent"/>
+                        <Viewbox VerticalAlignment="Center">
+                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Viewbox>
+                        <Rectangle x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1"/>
+                        <Rectangle x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName='backgroundRectangle' Property="Fill" Value="{Binding Path=Background, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+    <Style x:Key="EllipticalButtonStyle" TargetType="Button">
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="controls:ButtonAttachedBehavior.RoundedRadius" Value="10"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="grid" Background="{TemplateBinding Background}" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{TemplateBinding Height}"/>
+                        </Grid.RowDefinitions>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="circButton" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ResourceKey=SimpleCircularButtonBackgroundThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard />
+                                </VisualState>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused"/>
+                                <VisualState x:Name="PointerFocused"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid Grid.Column="0" Grid.Row="0" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="0" HorizontalAlignment="Right">
+                            <Rectangle x:Name="circButton" Stroke="{TemplateBinding Foreground}" StrokeThickness="0" Fill="#33FFFFFF" RadiusX="{TemplateBinding controls:ButtonAttachedBehavior.RoundedRadius}" RadiusY="{TemplateBinding controls:ButtonAttachedBehavior.RoundedRadius}"/>
+                            <ContentPresenter TextBlock.FontSize="{TemplateBinding FontSize}" TextBlock.FontFamily="Segoe UI" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                            <Rectangle x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1" RadiusX="{TemplateBinding controls:ButtonAttachedBehavior.RoundedRadius}" RadiusY="{TemplateBinding controls:ButtonAttachedBehavior.RoundedRadius}"/>
+                            <Rectangle x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1" RadiusX="{TemplateBinding controls:ButtonAttachedBehavior.RoundedRadius}" RadiusY="{TemplateBinding controls:ButtonAttachedBehavior.RoundedRadius}"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+    <Style x:Key="CircularButtonStyle" TargetType="Button">
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="Margin" Value="0,0,0,0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="ctrls:CircularButtonFillAttachedProperty.CircularButtonFill" Value="{StaticResource CircularButtonBackground}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="grid" Background="{TemplateBinding Background}" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{TemplateBinding Width}"/>
+                        </Grid.RowDefinitions>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="circButton" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ResourceKey=SimpleCircularButtonBackgroundThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard />
+                                </VisualState>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused"/>
+                                <VisualState x:Name="PointerFocused"/>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid Grid.Column="0" Grid.Row="0" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="0" HorizontalAlignment="Right">
+                            <Ellipse x:Name="circButton" Stroke="{TemplateBinding Foreground}" StrokeThickness="0" Fill="{TemplateBinding ctrls:CircularButtonFillAttachedProperty.CircularButtonFill}" />
+                            <ContentPresenter TextBlock.FontSize="{TemplateBinding FontSize}" TextBlock.FontFamily="Segoe UI Symbol" VerticalAlignment="Center" HorizontalAlignment="Center" TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                            <Ellipse x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1"/>
+                            <Ellipse x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="TextToggleButtonStyle" TargetType="ToggleButton">
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="ctrls:CircularButtonFillAttachedProperty.CircularButtonFill" Value="{StaticResource CircularButtonBackground}"/>
+        <Setter Property="ctrls:ButtonAttachedBehavior.HighlightFillClipRadius" Value="28"/>
+        <Setter Property="ctrls:ButtonAttachedBehavior.CenterPoint" Value="14,14"/>
+        <Setter Property="ctrls:ButtonAttachedBehavior.GlyphMargin" Value="0,0,0,0"/>
+        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid x:Name="grid" Background="{TemplateBinding Background}" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{TemplateBinding Width}"/>
+                        </Grid.RowDefinitions>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="0.5" Storyboard.TargetName="ButtonContent" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard />
+                                </VisualState>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused"/>
+                                <VisualState x:Name="PointerFocused"/>
+                            </VisualStateGroup>
+
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="circButtonHighlight" Storyboard.TargetProperty="Opacity" To="0.5" Duration="0:0:0.5" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="circButtonHighlight" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.5" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid x:Name="ButtonVisualRoot" Grid.Column="0" Grid.Row="0" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="0" HorizontalAlignment="Right">
+                            <Ellipse x:Name="circButtonHighlight" Stroke="{TemplateBinding Foreground}" StrokeThickness="0" Fill="Aqua" 
+                                     Opacity="0" ClipToBounds="False" Margin="14,10,14,4">
+                                <Ellipse.Effect>
+                                    <BlurEffect Radius="15" />
+                                </Ellipse.Effect>
+                            </Ellipse>
+
+                            <ContentPresenter x:Name="ButtonContent" TextBlock.FontSize="{TemplateBinding FontSize}" TextBlock.FontFamily="{TemplateBinding FontFamily}" 
+                                              VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                              TextBlock.Foreground="{TemplateBinding Foreground}"
+                                              Margin="{TemplateBinding ctrls:ButtonAttachedBehavior.GlyphMargin}"/>
+                            <Ellipse x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1" Margin="14,10,14,4"/>
+                            <Ellipse x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1" Margin="14,10,14,4"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="CircularToggleButtonStyle" TargetType="ToggleButton">
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="ctrls:CircularButtonFillAttachedProperty.CircularButtonFill" Value="{StaticResource CircularButtonBackground}"/>
+        <Setter Property="ctrls:ButtonAttachedBehavior.HighlightFillClipRadius" Value="28"/>
+        <Setter Property="ctrls:ButtonAttachedBehavior.CenterPoint" Value="14,14"/>
+        <Setter Property="ctrls:ButtonAttachedBehavior.GlyphMargin" Value="0,0,0,0"/>
+        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid x:Name="grid" Background="{TemplateBinding Background}" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{TemplateBinding Width}"/>
+                        </Grid.RowDefinitions>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="circButton" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ResourceKey=SimpleCircularButtonBackgroundThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard />
+                                </VisualState>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="RectFocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="RectFocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused"/>
+                                <VisualState x:Name="PointerFocused"/>
+                            </VisualStateGroup>
+
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="circButtonHighlight" Storyboard.TargetProperty="Opacity" To="0.75" Duration="0:0:0.5" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="circButtonHighlight" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.5" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid x:Name="ButtonVisualRoot" Grid.Column="0" Grid.Row="0" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="0" HorizontalAlignment="Right">
+                            <Ellipse Stroke="{TemplateBinding Foreground}" StrokeThickness="0" Fill="{TemplateBinding ctrls:CircularButtonFillAttachedProperty.CircularButtonFill}"/>
+                            <Ellipse x:Name="circButtonHighlight" Stroke="{TemplateBinding Foreground}" StrokeThickness="3" Fill="Aqua" 
+                                     Opacity="0" ClipToBounds="False"
+                                     Margin="{TemplateBinding ctrls:ButtonAttachedBehavior.HighlightMargin}">
+                                <Ellipse.Effect>
+                                    <BlurEffect Radius="15" />
+                                </Ellipse.Effect>
+                                <Ellipse.Clip>
+                                    <EllipseGeometry Center="{Binding Path=(ctrls:ButtonAttachedBehavior.CenterPoint), RelativeSource={RelativeSource TemplatedParent}}" RadiusX="{Binding Path=(ctrls:ButtonAttachedBehavior.HighlightFillClipRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                                                                    RadiusY="{Binding Path=(ctrls:ButtonAttachedBehavior.HighlightFillClipRadius), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                </Ellipse.Clip>
+                            </Ellipse>
+
+                            <Ellipse x:Name="circButton" Stroke="{TemplateBinding Foreground}" StrokeThickness="0" Fill="Transparent"/>
+                            <ContentPresenter TextBlock.FontSize="{TemplateBinding FontSize}" TextBlock.FontFamily="{TemplateBinding FontFamily}" 
+                                              VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                              TextBlock.Foreground="{TemplateBinding Foreground}"
+                                              Margin="{TemplateBinding ctrls:ButtonAttachedBehavior.GlyphMargin}"/>
+                            <Ellipse x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1" Visibility="{Binding Path=(ctrls:ButtonAttachedBehavior.UseSquareFocus), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='True'}"/>
+                            <Ellipse x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1" Visibility="{Binding Path=(ctrls:ButtonAttachedBehavior.UseSquareFocus), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='True'}"/>
+                            <Rectangle x:Name="RectFocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1" Visibility="{Binding Path=(ctrls:ButtonAttachedBehavior.UseSquareFocus), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='False'}"/>
+                            <Rectangle x:Name="RectFocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1" Visibility="{Binding Path=(ctrls:ButtonAttachedBehavior.UseSquareFocus), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='False'}"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="KioskModeToggleButtonStyle" TargetType="ToggleButton">
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="ctrls:CircularButtonFillAttachedProperty.CircularButtonFill" Value="{StaticResource CircularButtonBackground}"/>
+        <Setter Property="ctrls:ButtonAttachedBehavior.HighlightFillClipRadius" Value="28"/>
+        <Setter Property="ctrls:ButtonAttachedBehavior.CenterPoint" Value="14,14"/>
+        <Setter Property="ctrls:ButtonAttachedBehavior.GlyphMargin" Value="0,0,0,0"/>
+        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid x:Name="grid" Background="{TemplateBinding Background}" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{TemplateBinding Width}"/>
+                        </Grid.RowDefinitions>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="circButton" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ResourceKey=SimpleCircularButtonBackgroundThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="circButtonShape" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ResourceKey=SimpleCircularButtonBackgroundThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard />
+                                </VisualState>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="RectFocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="RectFocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused"/>
+                                <VisualState x:Name="PointerFocused"/>
+                            </VisualStateGroup>
+
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="circButtonHighlight" Storyboard.TargetProperty="Opacity" To="0.75" Duration="0:0:0.5" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="circButtonHighlight" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.5" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid x:Name="ButtonVisualRoot" Grid.Column="0" Grid.Row="0" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="0" HorizontalAlignment="Right">
+                            <Ellipse Stroke="{TemplateBinding Foreground}" StrokeThickness="0" Fill="{TemplateBinding ctrls:CircularButtonFillAttachedProperty.CircularButtonFill}"/>
+                            <Rectangle Width="{TemplateBinding Width}" Height="{TemplateBinding ctrls:ButtonAttachedBehavior.AdornmentShapeHeight}" Fill="{TemplateBinding ctrls:CircularButtonFillAttachedProperty.CircularButtonFill}" VerticalAlignment="Top"/>
+                            <Ellipse x:Name="circButtonHighlight" Stroke="{TemplateBinding Foreground}" StrokeThickness="3" Fill="Aqua" 
+                                     Opacity="0" ClipToBounds="False"
+                                     Margin="{TemplateBinding ctrls:ButtonAttachedBehavior.HighlightMargin}">
+                                <Ellipse.Effect>
+                                    <BlurEffect Radius="15" />
+                                </Ellipse.Effect>
+                                <Ellipse.Clip>
+                                    <EllipseGeometry Center="{Binding Path=(ctrls:ButtonAttachedBehavior.CenterPoint), RelativeSource={RelativeSource TemplatedParent}}" RadiusX="{Binding Path=(ctrls:ButtonAttachedBehavior.HighlightFillClipRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                                                                    RadiusY="{Binding Path=(ctrls:ButtonAttachedBehavior.HighlightFillClipRadius), RelativeSource={RelativeSource TemplatedParent}}"/>
+                                </Ellipse.Clip>
+                            </Ellipse>
+
+                            <Rectangle x:Name="circButtonShape"  Width="{TemplateBinding Width}" Height="{TemplateBinding ctrls:ButtonAttachedBehavior.AdornmentShapeHeight}" Fill="Transparent" VerticalAlignment="Top"/>
+                            <Ellipse x:Name="circButton" Stroke="{TemplateBinding Foreground}" StrokeThickness="0" Fill="Transparent"/>
+
+                            <TextBlock FontFamily="Segoe UI" FontSize="28"
+                                       Text="{TemplateBinding ctrls:ButtonAttachedBehavior.Label}" VerticalAlignment="Top" HorizontalAlignment="Center"
+                                       Foreground="White" />
+
+                            <Viewbox Width="24" Height="24" HorizontalAlignment="Center" Margin="0,0,0,0">
+                                <ContentControl Template="{TemplateBinding ctrls:ButtonAttachedBehavior.GlyphContent}"/>
+                            </Viewbox>
+
+                            <ContentPresenter TextBlock.FontSize="{TemplateBinding FontSize}" TextBlock.FontFamily="{TemplateBinding FontFamily}" 
+                                              VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                              TextBlock.Foreground="{TemplateBinding Foreground}"
+                                              Margin="{TemplateBinding ctrls:ButtonAttachedBehavior.GlyphMargin}"/>
+                            <Ellipse x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1" Visibility="{Binding Path=(ctrls:ButtonAttachedBehavior.UseSquareFocus), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='True'}"/>
+                            <Ellipse x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1" Visibility="{Binding Path=(ctrls:ButtonAttachedBehavior.UseSquareFocus), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='True'}"/>
+                            <Rectangle x:Name="RectFocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1" Visibility="{Binding Path=(ctrls:ButtonAttachedBehavior.UseSquareFocus), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='False'}"/>
+                            <Rectangle x:Name="RectFocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1" Visibility="{Binding Path=(ctrls:ButtonAttachedBehavior.UseSquareFocus), RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter='False'}"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="SegmentToggleButtonStyle" TargetType="ToggleButton">
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="ctrls:CircularButtonFillAttachedProperty.CircularButtonFill" Value="{StaticResource CircularButtonBackground}"/>
+        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid x:Name="grid" Background="{TemplateBinding Background}" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{TemplateBinding Width}"/>
+                        </Grid.RowDefinitions>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="circButtonBkgnd" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ResourceKey=SimpleCircularButtonBackgroundThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard />
+                                </VisualState>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused"/>
+                                <VisualState x:Name="PointerFocused"/>
+                            </VisualStateGroup>
+
+                            <VisualStateGroup x:Name="CheckStates">
+                                <VisualState x:Name="Checked">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="circButtonHighlight" Storyboard.TargetProperty="Opacity" To="0.5" Duration="0:0:0.5" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unchecked">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="circButtonHighlight" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.5" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid Grid.Column="0" Grid.Row="0" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="0" HorizontalAlignment="Right">
+                            <Canvas Width="28" Height="28" ClipToBounds="True" VerticalAlignment="Center">
+                                <Viewbox Width="28" Height="36" HorizontalAlignment="Left" Margin="0,-4,0,-3">
+                                    <Canvas Width="28" Height="28">
+                                        <Path x:Name="circButtonBkgnd" Fill="{StaticResource CircularButtonBackground}" Data="M-0.403,0L8.907,0C16.623,0 22.887,6.268 22.887,13.989C22.887,21.71 16.623,27.978 8.907,27.978L-0.403,27.978L-0.403,27.971C7.108,27.737 13.134,21.562 13.134,13.989C13.134,6.416 7.108,0.241 -0.403,0.007L-0.403,0Z"/>
+
+                                        <Path x:Name="circButtonHighlight" Opacity="0" Fill="Aqua" Data="M-0.403,0L8.907,0C16.623,0 22.887,6.268 22.887,13.989C22.887,21.71 16.623,27.978 8.907,27.978L-0.403,27.978L-0.403,27.971C7.108,27.737 13.134,21.562 13.134,13.989C13.134,6.416 7.108,0.241 -0.403,0.007L-0.403,0Z"/>
+
+                                        <Ellipse IsHitTestVisible="False" x:Name="circButton" Stroke="{TemplateBinding Foreground}" StrokeThickness="0" Fill="Transparent" Visibility="Collapsed"/>
+
+                                        <Path x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" StrokeDashArray="1,1" Stroke="White" StrokeThickness="1" Fill="Transparent" Data="M-0.403,0L8.907,0C16.623,0 22.887,6.268 22.887,13.989C22.887,21.71 16.623,27.978 8.907,27.978L-0.403,27.978L-0.403,27.971C7.108,27.737 13.134,21.562 13.134,13.989C13.134,6.416 7.108,0.241 -0.403,0.007L-0.403,0Z"/>
+                                        <Path x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" StrokeDashArray="1,1" Stroke="Black" StrokeThickness="1" Fill="Transparent" Data="M-0.403,0L8.907,0C16.623,0 22.887,6.268 22.887,13.989C22.887,21.71 16.623,27.978 8.907,27.978L-0.403,27.978L-0.403,27.971C7.108,27.737 13.134,21.562 13.134,13.989C13.134,6.416 7.108,0.241 -0.403,0.007L-0.403,0Z"/>
+
+                                        <Path Canvas.Left="14.5" Canvas.Top="12" Fill="White" Data="M19.042,10.098L21.86,14.578L16.224,14.578L19.042,10.098Z" RenderTransformOrigin="0.5, 0.5">
+                                            <Path.RenderTransform>
+                                                <RotateTransform Angle="180"/>
+                                            </Path.RenderTransform>
+                                        </Path>
+
+                                    </Canvas>
+                                </Viewbox>
+                            </Canvas>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="IconButtonStyle" TargetType="Button">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="RootGrid" Background="#0F0F">
+                        <Grid>
+                            <Rectangle x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="White" StrokeDashArray="1,1"/>
+                            <Rectangle x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="Black" StrokeDashArray="1,1"/>
+                        </Grid>
+                        <ContentPresenter x:Name="Text" Content="{TemplateBinding Content}" />
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="0.8" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RootGrid" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <!-- 
+                                        <DropTargetItemThemeAnimation TargetName="RootGrid"/>
+                                        -->
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="0.25" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="RootGrid" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualWhite" Storyboard.TargetProperty="Opacity"/>
+                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetName="FocusVisualBlack" Storyboard.TargetProperty="Opacity"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused" />
+                                <VisualState x:Name="PointerFocused" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+    <Style x:Key="SpinButton"  TargetType="Slider">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Slider">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="1"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBox Grid.RowSpan="3" Text="{Binding Value,Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" VerticalContentAlignment="Center" BorderThickness="1,1,0,1" Background="#33FFFFFF" Foreground="{StaticResource ApplicationForegroundObject}"/>
+                        <RepeatButton Grid.Column="1" Grid.Row="0" Command="Slider.IncreaseLarge" Background="#33FFFFFF">
+                            <Path Fill="{StaticResource ApplicationForegroundObject}" Data="M0,1 L0.5,0 1,1z" Width="9" Height="5" Stretch="Fill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </RepeatButton>
+                        <Rectangle Grid.Column="1" Grid.Row="1" Fill="#202020"/>
+                        <RepeatButton Grid.Column="1" Grid.Row="2" Command="Slider.DecreaseLarge" Background="#33FFFFFF">
+                            <Path Fill="{StaticResource ApplicationForegroundObject}" Data="M0,0 L0.5,1 1,0z" Width="9" Height="5" Stretch="Fill" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </RepeatButton>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="ArcStudioSeparatorStyle" TargetType="{x:Type Separator}">
+        <Setter Property="Background" Value="{StaticResource ContextMenuBackground}"/>
+        <Setter Property="Margin" Value="0,2,0,2"/>
+        <Setter Property="Focusable" Value="false"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Separator}">
+                    <Border BorderBrush="{StaticResource ContextMenuBorderColor}" BorderThickness="1" Height="1" SnapsToDevicePixels="true"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter> 
+    </Style>
+
+    <Style x:Key="ArcStudioContextMenuStyle" TargetType="{x:Type ContextMenu}">
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Grid.IsSharedSizeScope" Value="true" />
+        <Setter Property="HasDropShadow" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ContextMenu}">
+                    <Border x:Name="Border" Background="{StaticResource ContextMenuBackground}" BorderBrush="{StaticResource ContextMenuBorderColor}" BorderThickness="1">
+                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasDropShadow" Value="true">
+                            <Setter TargetName="Border" Property="Padding" Value="0,6,0,6" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ArcStudioContextMenuItemStyle" TargetType="{x:Type MenuItem}">
+        <Setter Property="Foreground" Value="{StaticResource ContextMenuForegroundColor}" />
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type MenuItem}">
+                    <Border x:Name="Border" BorderThickness="1" Padding="4,3,4,3">
+                        <Grid>
+                            <ContentPresenter x:Name="HeaderHost" ContentSource="Header" RecognizesAccessKey="True" /> 
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ButtonBase.Command" Value="{x:Null}" />
+                        <Trigger Property="IsHighlighted" Value="true">
+                            <Setter Property="Background" TargetName="Border" Value="{StaticResource ContextMenuHighlightedColor}"/>
+                            <Setter Property="BorderBrush" TargetName="Border" Value="{StaticResource ContextMenuHighlightedColor}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="DimGray"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style TargetType="{x:Type ctrls:GeometricContentControl}">
+        <Setter Property="ControlGeometry" Value="M 170, 80L 170, 0L 20,0L 0, 40L 20,80L 170,80 Z" />
+        <Setter Property="Background" Value="{StaticResource ContentPanelBackground}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ctrls:GeometricContentControl}">
+                    <Grid >
+                        <Path Name="mask" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Stretch="Fill" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" Stroke="{StaticResource CircularButtonBackground}" Fill="{TemplateBinding Background}" Data="{TemplateBinding ControlGeometry}"/>
+                        <Grid>
+                            <Grid.OpacityMask>
+                                <VisualBrush Visual="{Binding ElementName=mask}" />
+                            </Grid.OpacityMask>
+                            <ContentPresenter/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
